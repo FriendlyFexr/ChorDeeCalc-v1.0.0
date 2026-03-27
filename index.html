@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3p Chor Dai Dee Scorecard v1.0.4</title>
+    <title>3p Chor Dai Dee Scorecard v1.0.5</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
@@ -109,7 +109,9 @@
                             
                             <template x-for="pIdx in [0,1,2]">
                                 <td class="p-1 border-x border-gray-50 text-center">
-                                    <input type="number" min="0" max="18" x-model.number="row.cards[pIdx]" @input="calculateRow(rIndex)"
+                                    <input type="number" 
+                                           x-model.number="row.cards[pIdx]" 
+                                           @input="clampInput(rIndex, pIdx); calculateRow(rIndex)"
                                            class="input-card border rounded p-2 text-center font-black text-base outline-none transition-colors"
                                            :class="row.cards[pIdx] >= settings.x4 ? 'bg-red-800 text-white' : (row.cards[pIdx] >= settings.x3 ? 'bg-red-600 text-white' : (row.cards[pIdx] >= settings.x2 ? 'bg-orange-100 text-orange-700 border-orange-300' : 'bg-slate-50 border-gray-200'))">
                                 </td>
@@ -197,6 +199,14 @@
                     this.rows.push({ cards: [null, null, null], results: [0, 0, 0], special: [0, 0, 0], showSpecial: false, isDouble: false });
                 },
 
+                // NEW: Clamps input to 0-18 instantly in the UI
+                clampInput(rIdx, pIdx) {
+                    let val = this.rows[rIdx].cards[pIdx];
+                    if (val === null || val === '') return;
+                    if (val > 18) this.rows[rIdx].cards[pIdx] = 18;
+                    if (val < 0) this.rows[rIdx].cards[pIdx] = 0;
+                },
+
                 deleteRow(index) {
                     if (confirm("Delete this round?")) {
                         this.rows.splice(index, 1);
@@ -208,11 +218,7 @@
                 calculateRow(idx) {
                     let row = this.rows[idx];
                     let r = [0, 0, 0];
-                    let c = row.cards.map(v => {
-                        if (v === null || v === '') return null;
-                        let val = parseInt(v);
-                        return Math.min(Math.max(val, 0), 18);
-                    });
+                    let c = row.cards.map(v => (v !== null && v !== '') ? parseInt(v) : null);
 
                     let winIdx = c.indexOf(0);
                     if (winIdx !== -1 && c.some(v => v > 0)) {
