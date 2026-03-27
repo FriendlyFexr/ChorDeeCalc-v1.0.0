@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3p Chor Dai Dee Scorecard v1.0.5</title>
+    <title>3p Chor Dai Dee Scorecard v1.0.6</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
@@ -18,9 +18,14 @@
     <div class="max-w-6xl mx-auto bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl p-4 sm:p-6 text-slate-800">
         
         <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4 border-b border-indigo-100 pb-4">
-            <h1 class="text-3xl font-black text-indigo-700 tracking-tighter uppercase italic">
-                <span x-text="t('title')"></span>
-            </h1>
+            <div class="flex items-baseline gap-3">
+                <h1 class="text-3xl font-black text-indigo-700 tracking-tighter uppercase italic">
+                    <span x-text="t('title')"></span>
+                </h1>
+                <span class="text-[10px] font-mono text-slate-400 tracking-[0.2em] uppercase">
+                    v1.0.6
+                </span>
+            </div>
             
             <div class="flex items-center gap-2">
                 <button @click="toggleMusic()" 
@@ -153,12 +158,6 @@
             <button @click="addRows()" class="bg-indigo-600 text-white px-8 py-3 rounded-2xl font-bold hover:scale-105 hover:bg-indigo-700 transition-all shadow-xl">+5 Rows</button>
             <button @click="resetGame()" class="bg-rose-600 text-white px-8 py-3 rounded-2xl font-bold hover:scale-105 hover:bg-rose-700 transition-all shadow-xl" x-text="t('reset')"></button>
         </div>
-
-        <footer class="mt-12 text-center border-t border-indigo-50 pt-6">
-            <p class="text-[10px] font-mono text-slate-400 tracking-[0.2em] uppercase">
-                v1.0.4
-            </p>
-        </footer>
     </div>
 
     <script>
@@ -184,7 +183,7 @@
                 init() {
                     this.bgAudio.loop = true;
                     this.bgAudio.volume = 0.3;
-                    const saved = localStorage.getItem('3p_chor_dee_v104');
+                    const saved = localStorage.getItem('3p_chor_dee_v106');
                     if (saved) {
                         const data = JSON.parse(saved);
                         this.settings = data.settings;
@@ -199,7 +198,6 @@
                     this.rows.push({ cards: [null, null, null], results: [0, 0, 0], special: [0, 0, 0], showSpecial: false, isDouble: false });
                 },
 
-                // NEW: Clamps input to 0-18 instantly in the UI
                 clampInput(rIdx, pIdx) {
                     let val = this.rows[rIdx].cards[pIdx];
                     if (val === null || val === '') return;
@@ -247,12 +245,12 @@
                     this.totals = nt;
                 },
 
-                save() { localStorage.setItem('3p_chor_dee_v104', JSON.stringify({ settings: this.settings, rows: this.rows })); },
+                save() { localStorage.setItem('3p_chor_dee_v106', JSON.stringify({ settings: this.settings, rows: this.rows })); },
                 calculateAll() { this.rows.forEach((_, i) => this.calculateRow(i)); },
                 addRows() { for (let i = 0; i < 5; i++) this.createRow(); },
                 resetGame() { 
                     if (confirm("Reset all game data?")) { 
-                        localStorage.removeItem('3p_chor_dee_v104'); 
+                        localStorage.removeItem('3p_chor_dee_v106'); 
                         location.reload(); 
                     } 
                 }
