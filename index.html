@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3p Chor Dai Dee Scorecard</title>
+    <title>3p Chor Dai Dee Scorecard v1.0.1</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         body { background: linear-gradient(135deg, #166534 10%, #facc15 90%); min-height: 100vh; }
         [x-cloak] { display: none !important; }
@@ -18,7 +17,7 @@
 
     <div class="max-w-6xl mx-auto bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl p-4 sm:p-6 text-slate-800">
         
-        <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4 border-b border-indigo-100 pb-4">
             <h1 class="text-3xl font-black text-indigo-700 tracking-tighter uppercase italic">
                 <span x-text="t('title')"></span>
             </h1>
@@ -37,15 +36,15 @@
             </div>
         </div>
 
-        <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 border-b border-indigo-100 pb-6">
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div class="bg-white p-4 rounded-xl shadow-sm border border-indigo-50">
                 <h2 class="font-bold mb-3 text-indigo-800 text-sm flex items-center gap-2">
-                    <span class="bg-indigo-100 px-2 py-0.5 rounded">1</span> 
+                    <span class="bg-indigo-100 px-2 py-0.5 rounded text-[10px]">SETTINGS</span> 
                     <span x-text="t('setup')"></span>
                 </h2>
                 <div class="grid grid-cols-3 gap-2 mb-4">
                     <template x-for="(name, index) in settings.players" :key="index">
-                        <input type="text" x-model="settings.players[index]" class="border p-2 rounded text-xs focus:ring-2 focus:ring-indigo-400 outline-none bg-slate-50">
+                        <input type="text" x-model="settings.players[index]" class="border p-2 rounded text-xs focus:ring-2 focus:ring-indigo-400 outline-none bg-slate-50 font-bold">
                     </template>
                 </div>
                 <div class="flex items-center gap-3">
@@ -59,74 +58,77 @@
 
             <div class="bg-white p-4 rounded-xl shadow-sm border border-indigo-50">
                 <h2 class="font-bold mb-3 text-indigo-800 text-sm flex items-center gap-2">
-                    <span class="bg-indigo-100 px-2 py-0.5 rounded">2</span> 
+                    <span class="bg-indigo-100 px-2 py-0.5 rounded text-[10px]">RULES</span> 
                     <span x-text="t('threshold')"></span>
                 </h2>
                 <div class="grid grid-cols-3 gap-2">
                     <div class="text-center bg-amber-50 p-2 rounded border border-amber-100">
                         <p class="text-[10px] font-bold text-amber-700">x2</p>
-                        <input type="number" x-model.number="settings.x2" @input="calculateAll()" class="w-full text-center text-sm border border-amber-200 rounded no-spinner font-bold">
+                        <input type="number" x-model.number="settings.x2" @input="calculateAll()" class="w-full text-center text-sm border border-amber-200 rounded no-spinner font-bold bg-white">
                     </div>
                     <div class="text-center bg-amber-50 p-2 rounded border border-amber-100">
                         <p class="text-[10px] font-bold text-amber-700">x3</p>
-                        <input type="number" x-model.number="settings.x3" @input="calculateAll()" class="w-full text-center text-sm border border-amber-200 rounded no-spinner font-bold">
+                        <input type="number" x-model.number="settings.x3" @input="calculateAll()" class="w-full text-center text-sm border border-amber-200 rounded no-spinner font-bold bg-white">
                     </div>
                     <div class="text-center bg-amber-50 p-2 rounded border border-amber-100">
                         <p class="text-[10px] font-bold text-amber-700">x4</p>
-                        <input type="number" x-model.number="settings.x4" @input="calculateAll()" class="w-full text-center text-sm border border-amber-200 rounded no-spinner font-bold">
+                        <input type="number" x-model.number="settings.x4" @input="calculateAll()" class="w-full text-center text-sm border border-amber-200 rounded no-spinner font-bold bg-white">
                     </div>
                 </div>
             </div>
         </section>
 
-        <div class="table-container overflow-auto max-h-[500px] rounded-xl border border-gray-200 shadow-inner bg-white">
+        <div class="table-container overflow-auto max-h-[600px] rounded-xl border border-gray-200 shadow-inner bg-white">
             <table class="w-full text-left border-collapse min-w-[800px]">
                 <thead class="sticky top-0 z-10">
                     <tr class="bg-indigo-700 text-white text-[11px] uppercase tracking-wider">
-                        <th class="p-2 border border-indigo-800 text-center" x-text="t('game')"></th>
+                        <th class="p-3 border border-indigo-800 text-center" x-text="t('game')"></th>
                         <template x-for="name in settings.players">
-                            <th class="p-2 border border-indigo-800 text-center" x-text="name"></th>
+                            <th class="p-3 border border-indigo-800 text-center" x-text="name"></th>
                         </template>
                         <template x-for="name in settings.players">
-                            <th class="p-2 border border-indigo-800 text-center bg-indigo-800" x-text="name"></th>
+                            <th class="p-3 border border-indigo-800 text-center bg-indigo-800" x-text="name"></th>
                         </template>
-                        <th class="p-2 border border-indigo-800 text-center" x-text="t('special')"></th>
+                        <th class="p-3 border border-indigo-800 text-center" x-text="t('special')"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="sticky top-[34px] z-10 bg-yellow-300 font-black text-sm border-b-2 border-yellow-400">
-                        <td class="p-2 text-center text-yellow-800">Σ</td>
+                    <tr class="sticky top-[42px] z-10 bg-yellow-300 font-black text-sm border-b-2 border-yellow-400">
+                        <td class="p-3 text-center text-yellow-800">Σ</td>
                         <td colspan="3" class="text-center italic text-[10px] text-yellow-900" x-text="t('liveScore')"></td>
                         <template x-for="total in totals">
-                            <td class="p-2 text-center" :class="total < 0 ? 'text-red-700' : 'text-green-800'" x-text="total.toFixed(1)"></td>
+                            <td class="p-3 text-center" :class="total < 0 ? 'text-red-700' : 'text-green-800'" x-text="total.toFixed(1)"></td>
                         </template>
-                        <td class="p-2 text-center text-[10px] uppercase" x-text="t('total')"></td>
+                        <td class="p-3 text-center text-[10px] uppercase font-bold" x-text="t('total')"></td>
                     </tr>
 
                     <template x-for="(row, rIndex) in rows" :key="rIndex">
                         <tr class="hover:bg-indigo-50/50 transition-colors border-b border-gray-100">
                             <td class="p-2 text-center font-mono text-xs text-indigo-400 font-bold" x-text="rIndex + 1"></td>
+                            
                             <template x-for="pIdx in [0,1,2]">
                                 <td class="p-1 border-x border-gray-50 text-center">
                                     <input type="number" min="0" max="18" x-model.number="row.cards[pIdx]" @input="calculateRow(rIndex)"
-                                           class="input-card border rounded p-1 text-center font-bold text-sm outline-none"
-                                           :class="row.cards[pIdx] >= settings.x4 ? 'bg-red-800 text-white' : (row.cards[pIdx] >= settings.x3 ? 'bg-red-600 text-white' : (row.cards[pIdx] >= settings.x2 ? 'bg-orange-100 text-orange-700' : 'bg-slate-50'))">
+                                           class="input-card border rounded p-2 text-center font-black text-base outline-none transition-colors"
+                                           :class="row.cards[pIdx] >= settings.x4 ? 'bg-red-800 text-white' : (row.cards[pIdx] >= settings.x3 ? 'bg-red-600 text-white' : (row.cards[pIdx] >= settings.x2 ? 'bg-orange-100 text-orange-700 border-orange-300' : 'bg-slate-50 border-gray-200'))">
                                 </td>
                             </template>
+
                             <template x-for="pIdx in [0,1,2]">
-                                <td class="p-1 border-x border-gray-50 text-center font-bold text-sm"
+                                <td class="p-2 border-x border-gray-50 text-center font-black text-sm"
                                     :class="row.results[pIdx] < 0 ? 'text-red-500' : (row.results[pIdx] > 0 ? 'text-green-600' : 'text-gray-300')"
                                     x-text="row.results[pIdx].toFixed(1)"></td>
                             </template>
-                            <td class="p-1 text-center">
-                                <div class="flex flex-col gap-1">
-                                    <label class="text-[9px] bg-blue-50 text-blue-700 px-1 py-0.5 rounded cursor-pointer flex items-center justify-center">
-                                        <input type="checkbox" x-model="row.isDouble" @change="calculateRow(rIndex)" class="mr-1 scale-75"> ♦️3 拉尾
+
+                            <td class="p-2 text-center">
+                                <div class="flex flex-col gap-1 items-center">
+                                    <label class="text-[9px] bg-blue-50 text-blue-700 px-2 py-1 rounded-lg border border-blue-100 cursor-pointer flex items-center shadow-sm">
+                                        <input type="checkbox" x-model="row.isDouble" @change="calculateRow(rIndex)" class="mr-1 scale-90"> ♦️3 拉尾
                                     </label>
-                                    <button @click="row.showSpecial = !row.showSpecial" class="text-[9px] px-1 py-0.5 rounded border border-dashed bg-white text-indigo-600 border-indigo-200">Bonus</button>
+                                    <button @click="row.showSpecial = !row.showSpecial" class="text-[9px] px-2 py-1 rounded border border-dashed bg-white text-indigo-600 border-indigo-200 hover:bg-indigo-50">Bonus</button>
                                     <div x-show="row.showSpecial" class="flex gap-1 justify-center mt-1" x-cloak>
                                         <template x-for="pIdx in [0,1,2]">
-                                            <input type="number" x-model.number="row.special[pIdx]" @input="calculateRow(rIndex)" class="w-8 text-[9px] border border-indigo-200 rounded text-center no-spinner">
+                                            <input type="number" x-model.number="row.special[pIdx]" @input="calculateRow(rIndex)" class="w-9 text-[10px] border border-indigo-200 rounded text-center no-spinner bg-indigo-50 font-bold">
                                         </template>
                                     </div>
                                 </div>
@@ -137,10 +139,16 @@
             </table>
         </div>
 
-        <div class="mt-8 flex flex-wrap justify-center gap-3">
-            <button @click="addRows()" class="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold hover:scale-105 transition-all shadow-lg">+5 Rows</button>
-            <button @click="resetGame()" class="bg-rose-600 text-white px-6 py-3 rounded-xl font-bold hover:scale-105 transition-all shadow-lg" x-text="t('reset')"></button>
+        <div class="mt-8 flex flex-wrap justify-center gap-4">
+            <button @click="addRows()" class="bg-indigo-600 text-white px-8 py-3 rounded-2xl font-bold hover:scale-105 hover:bg-indigo-700 transition-all shadow-xl">+5 Rows</button>
+            <button @click="resetGame()" class="bg-rose-600 text-white px-8 py-3 rounded-2xl font-bold hover:scale-105 hover:bg-rose-700 transition-all shadow-xl" x-text="t('reset')"></button>
         </div>
+
+        <footer class="mt-12 text-center border-t border-indigo-50 pt-6">
+            <p class="text-[10px] font-mono text-slate-400 tracking-[0.2em] uppercase">
+                v1.0.1
+            </p>
+        </footer>
     </div>
 
     <script>
@@ -150,11 +158,20 @@
                 musicPlaying: false,
                 bgAudio: new Audio('Silly Noobies.mp3'),
                 dictionary: {
-                    en: { title: "3P Chor Dai Dee", setup: "Players & Base", base: "Base:", incBase: "Mult Base", threshold: "Thresholds (x2, x3, x4)", game: "Rd", special: "Action", liveScore: "Standings", total: "Total", reset: "Clear" },
-                    zh: { title: "3人锄大D记分板", setup: "玩家/底注", base: "底注:", incBase: "底注乘倍", threshold: "翻倍门槛 (x2, x3, x4)", game: "局", special: "动作", liveScore: "总分", total: "合计", reset: "清空" }
+                    en: { title: "3P Chor Dai Dee", setup: "Players & Base", base: "Base Score:", incBase: "Multiply Base", threshold: "Multipliers (x2, x3, x4)", game: "Round", special: "Action", liveScore: "Standings", total: "Summary", reset: "Reset Data" },
+                    zh: { title: "3人锄大D记分板", setup: "玩家与底注", base: "底注:", incBase: "底注乘倍", threshold: "翻倍门槛 (x2, x3, x4)", game: "局数", special: "动作", liveScore: "目前总计", total: "合计", reset: "清空所有" }
                 },
-                settings: { players: ['P1', 'P2', 'P3'], baseAmount: 2, includeBaseInMult: false, x2: 10, x3: 13, x4: 17, weight: 1 },
-                rows: [], totals: [0, 0, 0],
+                settings: { 
+                    players: ['Player 1', 'Player 2', 'Player 3'], 
+                    baseAmount: 2, 
+                    includeBaseInMult: false, 
+                    x2: 10, 
+                    x3: 13, 
+                    x4: 17, 
+                    weight: 1 
+                },
+                rows: [], 
+                totals: [0, 0, 0],
                 
                 t(key) { return this.dictionary[this.lang][key]; },
                 toggleLang() { this.lang = (this.lang === 'en' ? 'zh' : 'en'); },
@@ -166,7 +183,7 @@
                 init() {
                     this.bgAudio.loop = true;
                     this.bgAudio.volume = 0.3;
-                    const saved = localStorage.getItem('3p_chordeev4');
+                    const saved = localStorage.getItem('3p_chor_dee_v101');
                     if (saved) {
                         const data = JSON.parse(saved);
                         this.settings = data.settings;
@@ -191,20 +208,26 @@
                         let winGains = 0;
                         c.forEach((count, i) => {
                             if (i === winIdx || count === null) return;
+                            // Check multiplier thresholds
                             let mult = count >= this.settings.x4 ? 4 : (count >= this.settings.x3 ? 3 : (count >= this.settings.x2 ? 2 : 1));
+                            
                             let amt = this.settings.includeBaseInMult 
                                 ? ((count * this.settings.weight) + this.settings.baseAmount) * mult
                                 : (count * this.settings.weight * mult) + this.settings.baseAmount;
+                            
+                            // Apply double action (e.g. Diamond 3 last)
                             if (row.isDouble) amt *= 2;
+                            
                             amt = Math.ceil(amt);
                             r[i] -= amt; winGains += amt;
                         });
                         r[winIdx] = winGains;
                     }
+                    // Add special bonus points
                     row.special.forEach((val, i) => r[i] += (parseFloat(val) || 0));
                     row.results = r;
                     this.calculateTotals();
-                    localStorage.setItem('3p_chordeev4', JSON.stringify({ settings: this.settings, rows: this.rows }));
+                    this.save();
                 },
 
                 calculateTotals() {
@@ -213,9 +236,18 @@
                     this.totals = nt;
                 },
 
+                save() {
+                    localStorage.setItem('3p_chor_dee_v101', JSON.stringify({ settings: this.settings, rows: this.rows }));
+                },
+
                 calculateAll() { this.rows.forEach((_, i) => this.calculateRow(i)); },
                 addRows() { for (let i = 0; i < 5; i++) this.createRow(); },
-                resetGame() { if (confirm("Clear data?")) { localStorage.removeItem('3p_chordeev4'); location.reload(); } }
+                resetGame() { 
+                    if (confirm("Reset all game data? This cannot be undone.")) { 
+                        localStorage.removeItem('3p_chor_dee_v101'); 
+                        location.reload(); 
+                    } 
+                }
             }
         }
     </script>
